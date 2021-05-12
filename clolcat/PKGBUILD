@@ -1,0 +1,22 @@
+pkgname=clolcat
+pkgver=1.1
+pkgrel=1
+
+pkgdesc="the fastest lolcat uwu"
+arch=('any')
+url="https://github.com/IchMageBaume/clolcat"
+license=('WTFPL')
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/IchMageBaume/clolcat/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('a5b8fc25603111e6ded9f72ed11e1cbbd5252427323cebb6724119d05f39c84735396b117a90793464742ac427be6416d58f9eff8104c8b9b86d02b79b6b5325')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	mkdir -p "$pkgdir/usr/bin"
+	make DESTDIR="$pkgdir/usr/bin/" install
+}
