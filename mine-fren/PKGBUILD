@@ -1,0 +1,34 @@
+pkgname=mine-fren
+pkgver=0.1
+pkgrel=1
+
+pkgdesc="Pre-processor for minecraft regions for easier/faster rendering"
+arch=('any')
+url="https://github.com/llenck/mine-fren"
+license=('GPL3')
+
+depends=('zstd')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/mine-fren/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('a1f879f64b3c1bec91d30bad401a663b61a4d4ba915d25ad8284b462ea6526feb5062e462d79768a1b29e8c453a8f95fc4b1992de085f846ad7d3739b5627d96')
+
+prepare() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	rm -rf deps/libnbt
+	git clone 'https://github.com/IDidMakeThat/libnbt' deps/libnbt
+
+	# make sure to use the commit of the current version at release $pkgver
+	cd deps/libnbt
+	git checkout f07ec882bd1876b05c34fcd558b910f61030862a
+}
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver/minifier"
+	make release
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver/minifier"
+	mkdir -p "$pkgdir/usr/bin"
+	make INSTALL_PATH="$pkgdir/usr/bin/" install
+}
