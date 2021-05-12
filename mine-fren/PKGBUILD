@@ -1,5 +1,5 @@
 pkgname=mine-fren
-pkgver=0.1
+pkgver=0.2
 pkgrel=1
 
 pkgdesc="Pre-processor for minecraft regions for easier/faster rendering"
@@ -9,7 +9,7 @@ license=('GPL3')
 
 depends=('zstd')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/mine-fren/archive/refs/tags/$pkgver.tar.gz")
-sha512sums=('a1f879f64b3c1bec91d30bad401a663b61a4d4ba915d25ad8284b462ea6526feb5062e462d79768a1b29e8c453a8f95fc4b1992de085f846ad7d3739b5627d96')
+sha512sums=('c72cc0ce915f8e4f051a9c38496c043c0d06ea319ebdf8dbef9c1b2ee8b450172a17d3b952f90dd8e09a31a013792447c82df3de57009eebe6eff2af7654640e')
 
 prepare() {
 	cd "$srcdir/$pkgname-$pkgver"
