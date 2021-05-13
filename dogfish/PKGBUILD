@@ -1,0 +1,34 @@
+pkgname=dogfish
+pkgver=1.0
+pkgrel=1
+
+pkgdesc="local chess ui, with engine."
+url="https://github.com/bgfxc4/dogfish"
+license=('GPL2')
+
+arch=('any')
+depends=('sfml')
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/bgfxc4/dogfish/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('9e46d51eba0184c64f8a666fbd9ed7ba4d69b8ba5c3f9a48f632ef00f3396b4a8834e29a743daaf1984204bde3585b205abdb8ce6aebffa8edf1f52051d0e535')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver/gui"
+
+	sed -i 's/"images/"\/usr\/share\/dogfish/g' board-ui.cpp graphics.cpp
+
+	CXXFLAGS="$CXXFLAGS -std=c++2a"
+	make release
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver/gui"
+
+	mkdir -p "$pkgdir/usr/bin"
+	install main "$pkgdir/usr/bin/dogfish"
+
+	mkdir -p "$pkgdir/usr/share/dogfish"
+	mkdir -p "$pkgdir/usr/share/dogfish/figures"
+	install -m644 -t "$pkgdir/usr/share/dogfish" images/*.png
+	install -m644 -t "$pkgdir/usr/share/dogfish/figures" images/figures/*.png
+}
