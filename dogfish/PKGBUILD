@@ -1,5 +1,5 @@
 pkgname=dogfish
-pkgver=1.0
+pkgver=1.1
 pkgrel=1
 
 pkgdesc="local chess ui, with engine."
@@ -10,7 +10,7 @@ arch=('any')
 depends=('sfml')
 
 source=("$pkgname-$pkgver.tar.gz::https://github.com/bgfxc4/dogfish/archive/refs/tags/$pkgver.tar.gz")
-sha512sums=('9e46d51eba0184c64f8a666fbd9ed7ba4d69b8ba5c3f9a48f632ef00f3396b4a8834e29a743daaf1984204bde3585b205abdb8ce6aebffa8edf1f52051d0e535')
+sha512sums=('d299c9ccb80a560f0dcec4ccdb327737da834e55ad9123ec19ff4794d8fef31d21282073b53b0e500acd73d847ddb895a240e3b7cd8c0cf2561e27b2f16cac4b')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver/gui"
