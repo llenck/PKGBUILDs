@@ -1,0 +1,34 @@
+pkgname=swapify
+pkgver=1.0
+pkgrel=2
+
+pkgdesc="User-space manual process swapping"
+url="https://github.com/llenck/swapify"
+license=('GPL2')
+
+arch=('any')
+depends=()
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/swapify/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('a4fd56fd107049f10abf328ca8c205773f0924a2328fbff9818c562b60dd4fcff78703ca647b45bf589b62be792ea199d23c34e339ca973473564abb944fed3f')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	sed -i 's-/bin/-/usr/bin/-g' Makefile
+	sed -i 's-/lib/-/usr/lib/-g' Makefile
+
+	make release
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	mkdir -p $pkgdir/usr/bin
+	mkdir -p $pkgdir/usr/lib
+
+	make INSTALL_PREFIX="$pkgdir" install
+
+	rmdir $pkgdir/bin
+	rmdir $pkgdir/lib
+}
