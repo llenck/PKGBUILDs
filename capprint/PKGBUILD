@@ -1,0 +1,22 @@
+pkgname=capprint
+pkgver=1.1
+pkgrel=1
+
+pkgdesc="Print current threads capabilities. Useful for checking inheritable caps"
+arch=('any')
+url="https://github.com/llenck/capprint"
+
+depends=("libcap")
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/capprint/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('e646499b69097c6954f9bdad4afb2566bddc20071568ede806139fcd3a42437f1947a89df8e129db9f867c85fdac4e642d3e0082049c105f9abfb06c96bedf01')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make release
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	install -Dm755 main "$pkgdir/usr/bin/capprint"
+}
