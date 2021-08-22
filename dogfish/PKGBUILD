@@ -1,5 +1,5 @@
 pkgname=dogfish
-pkgver=1.1
+pkgver=1.2
 pkgrel=1
 
 pkgdesc="local chess ui, with engine."
@@ -10,12 +10,12 @@ arch=('any')
 depends=('sfml')
 
 source=("$pkgname-$pkgver.tar.gz::https://github.com/bgfxc4/dogfish/archive/refs/tags/$pkgver.tar.gz")
-sha512sums=('d299c9ccb80a560f0dcec4ccdb327737da834e55ad9123ec19ff4794d8fef31d21282073b53b0e500acd73d847ddb895a240e3b7cd8c0cf2561e27b2f16cac4b')
+sha512sums=('aa607df224444a0a19ac52137c0993fb86edb56770dfd0320730a1d2fca49ebe8d94c12988da020f2959a764caa867b0ac272950531a24d9b67c9af1e7c0db12')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver/gui"
+	cd "$srcdir/$pkgname-$pkgver"
 
-	sed -i 's/"images/"\/usr\/share\/dogfish/g' board-ui.cpp graphics.cpp
+	sed -i 's/"images/"\/usr\/share\/dogfish/g' gui/board-ui.cpp gui/graphics.cpp
 
 	CXXFLAGS="$CXXFLAGS -std=c++2a"
 	make release
@@ -24,11 +24,11 @@ build() {
 package() {
 	cd "$srcdir/$pkgname-$pkgver/gui"
 
-	mkdir -p "$pkgdir/usr/bin"
-	install main "$pkgdir/usr/bin/dogfish"
+	install -Dm755 main "$pkgdir/usr/bin/dogfish"
 
-	mkdir -p "$pkgdir/usr/share/dogfish"
-	mkdir -p "$pkgdir/usr/share/dogfish/figures"
-	install -m644 -t "$pkgdir/usr/share/dogfish" images/*.png
-	install -m644 -t "$pkgdir/usr/share/dogfish/figures" images/figures/*.png
+	install -Dm644 -t "$pkgdir/usr/share/dogfish" images/*.png
+	install -Dm644 -t "$pkgdir/usr/share/dogfish/figures" images/figures/*.png
+
+	cd ../tui
+	install main "$pkgdir/usr/bin/dogfish-tui"
 }
