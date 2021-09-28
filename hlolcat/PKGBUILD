@@ -1,0 +1,22 @@
+pkgname=hlolcat
+pkgver=1.0
+pkgrel=2
+
+pkgdesc="Haskell implementation of lolcat"
+arch=('any')
+url="https://github.com/llenck/hlolcat"
+
+depends=()
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/$pkgname/archive/refs/tags/$pkgver.tar.gz")
+sha512sums=('7896b4e97bec771c24c772a02071b37782c7c5e18f09337c47a3e73ab38fed7616062ed4c3f75fa19bb42db91d94b8ec0d1d820c4c6c54ced6d0dde1989514a4')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	install -Dm755 lolcat "$pkgdir/usr/bin/hlolcat"
+}
