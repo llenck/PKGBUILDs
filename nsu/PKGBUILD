@@ -1,0 +1,20 @@
+pkgname=nsu
+pkgver=1
+pkgrel=1
+
+pkgdesc="Set user-id to arbitrary integer"
+arch=('any')
+url="https://github.com/llenck/nsu"
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/llenck/nsu/archive/refs/tags/v$pkgver.tar.gz")
+sha512sums=('20b87f58ebae1f9d459f7b33c04d4f4dd5b9644dd59f9a681f76e20d4d9495bb590ef156c2bfd449bfeb27a1f4da82c3455cbe35cbb108a98905dae9c66aa092')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make release
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	install -Dm755 nsu "$pkgdir/usr/bin/nsu"
+}
