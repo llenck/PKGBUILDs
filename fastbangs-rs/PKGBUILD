@@ -1,23 +1,24 @@
 pkgname=fastbangs-rs-git
-pkgver=r17.1129212
+pkgver=r20.bce539d
 pkgrel=1
 pkgdesc='Shortcut-based meta search engine'
-arch=('any')
+arch=('i686' 'x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://codeberg.com/lialenck/fastbangs-rs'
 license=('AGPL3')
 conflicts=('fastbangs-rs')
 provides=('fastbangs-rs')
 makedepends=('esbuild' 'sassc' 'rustup')
 backup=('etc/fastbangs-rs.yaml')
-install=post.install
 source=('git+https://codeberg.org/lialenck/fastbangs-rs.git'
-	'fastbangs-rs.service'
-	'fastbangs-rs.yaml'
-	'tmpfiles.conf')
+	    'fastbangs-rs.service'
+	    'fastbangs-rs.yaml'
+	    'tmpfiles.conf'
+	    'sysusers.conf')
 b2sums=('SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP')
+	    'SKIP'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP')
 
 pkgver() {
 	cd fastbangs-rs
@@ -51,5 +52,6 @@ package() {
 	install -Dm755 fastbangs-rs/target/"$(rust_chost)"/release/fastbangs "$pkgdir/usr/bin/fastbangs-rs"
 	install -Dm644 fastbangs-rs.service "$pkgdir/usr/lib/systemd/system/fastbangs-rs.service"
 	install -Dm644 fastbangs-rs.yaml "$pkgdir/etc/fastbangs-rs.yaml"
-	install -Dm644 tmpfiles.conf "$pkgdir/usr/lib/tmpfiles.d/qbot-runtime.conf"
+    install -Dm644 sysusers.conf "$pkgdir/usr/lib/sysusers.d/fastbangs-rs.conf"
+	install -Dm644 tmpfiles.conf "$pkgdir/usr/lib/tmpfiles.d/fastbangs-rs.conf"
 }
