@@ -1,0 +1,57 @@
+pkgname=qbot-runtime-git
+pkgver=r85.d75558c
+pkgrel=1
+pkgdesc='Simple chatbot runtime'
+arch=('any')
+url='https://codeberg.com/lialenck/qbot'
+license=('AGPL3')
+conflicts=('qbot-runtime')
+provides=('qbot-runtime')
+makedepends=('rustup')
+backup=('etc/qbot-runtime.yaml')
+install=post.install
+source=('git+https://codeberg.org/lialenck/qbot.git'
+	'qbot-runtime.service'
+	'qbot-runtime.yaml'
+	'tmpfiles.conf')
+b2sums=('SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP')
+
+pkgver() {
+	cd qbot/qbot-runtime
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+rust_chost() {
+	sed \
+		-e "s/-pc-linux/-unknown-linux/" \
+		-e "s/armv7l-/armv7-/" \
+		<<< "$CHOST"
+}
+
+prepare() {
+    cd "qbot"
+	# NOTE nightly required due to edition2024
+	rustup install nightly
+	rustup target add "$(rust_chost)"
+	rustup target add wasm32-unknown-unknown # qbot-webhook/jaq-interface
+	cargo +nightly fetch --target "$(rust_chost)"
+}
+
+build() {
+	cd "qbot/qbot-runtime"
+	cargo +nightly build \
+		--frozen \
+		--target "$(rust_chost)" \
+		--release \
+		--bin qbot-runtime
+}
+
+package() {
+	install -Dm755 qbot/target/"$(rust_chost)"/release/qbot-runtime "$pkgdir/usr/bin/qbot-runtime"
+	install -Dm644 qbot-runtime.service "$pkgdir/usr/lib/systemd/system/qbot-runtime.service"
+	install -Dm600 qbot-runtime.yaml "$pkgdir/etc/qbot-runtime.yaml"
+	install -Dm644 tmpfiles.conf "$pkgdir/usr/lib/tmpfiles.d/qbot-runtime.conf"
+}

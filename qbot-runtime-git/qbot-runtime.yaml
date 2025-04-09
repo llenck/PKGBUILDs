@@ -1,0 +1,21 @@
+platforms: {}
+#  matrix:
+#    password: wubbel
+#    homeserver_url: https://example.org
+#    device_name: qbot-runtime
+#    username: qbot-runtime
+#
+#  signal:
+#    device_name: qbot-runtime
+#  telegram:
+#    token: blubbel
+
+bots:
+  remindme: {}
+  statuspage: {}
+#  webhook:
+#    addr: 127.0.0.1:8012
+#    pub_root: http://127.0.0.1:8012
+
+log_filters: warn,qbot_core=info,qbot_runtime=info,qbot_reminder=info,qbot_statuspage=info,qbot_webhook=info,matrix_sdk_crypto::backups=error
+log_style: auto

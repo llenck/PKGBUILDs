@@ -1,0 +1,8 @@
+post_install() {
+	id -u qbot-runtime &>/dev/null || {
+		echo Creating qbot-runtime user...
+		useradd -U qbot-runtime
+	}
+	echo Setting ownership of /etc/qbot-runtime.yaml...
+	chown qbot-runtime:qbot-runtime /etc/qbot-runtime.yaml
+}
