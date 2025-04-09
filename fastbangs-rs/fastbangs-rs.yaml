@@ -1,0 +1,18 @@
+# Search queries will be redirected here
+base_url: http://localhost:28000
+# Path for the website icon for the url bar
+icon_url: ""
+# Pairs of [Udp address used for internal communication, bind address for the frontend/api].
+# On startup, binds against all internal addresses are attempted, and the first succeeding determines
+# Which node we are.
+# Note that changing this set of nodes after the first start is, as of now, unsupported.
+# Also note that internal communication is assumed to be secure; no additional encryption is done. This
+# can be accomplished by letting the nodes communicate over a VPN and listing those addresses here.
+nodes: []
+  # - [a internal address, a public bind address]
+  # - [another internal address, another bind address]
+
+user: ""
+# Base64 of the sha512 of the admin password. Can be generated using:
+# echo -n YOUR_PASSWORD | sha512sum | cut -f1 | xxd -r -p | base64 -w0
+pw_hash: ""

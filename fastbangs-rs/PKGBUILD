@@ -1,0 +1,55 @@
+pkgname=fastbangs-rs-git
+pkgver=r17.1129212
+pkgrel=1
+pkgdesc='Shortcut-based meta search engine'
+arch=('any')
+url='https://codeberg.com/lialenck/fastbangs-rs'
+license=('AGPL3')
+conflicts=('fastbangs-rs')
+provides=('fastbangs-rs')
+makedepends=('esbuild' 'sassc' 'rustup')
+backup=('etc/fastbangs-rs.yaml')
+install=post.install
+source=('git+https://codeberg.org/lialenck/fastbangs-rs.git'
+	'fastbangs-rs.service'
+	'fastbangs-rs.yaml'
+	'tmpfiles.conf')
+b2sums=('SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP')
+
+pkgver() {
+	cd fastbangs-rs
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+rust_chost() {
+	sed \
+		-e "s/-pc-linux/-unknown-linux/" \
+		-e "s/armv7l-/armv7-/" \
+		<<< "$CHOST"
+}
+
+prepare() {
+    cd "fastbangs-rs"
+	rustup install stable
+	rustup target add "$(rust_chost)"
+	cargo +stable fetch --target "$(rust_chost)"
+}
+
+build() {
+    cd "fastbangs-rs"
+	mkdir -p build
+	cargo +stable build \
+		--frozen \
+		--target "$(rust_chost)" \
+		--release
+}
+
+package() {
+	install -Dm755 fastbangs-rs/target/"$(rust_chost)"/release/fastbangs "$pkgdir/usr/bin/fastbangs-rs"
+	install -Dm644 fastbangs-rs.service "$pkgdir/usr/lib/systemd/system/fastbangs-rs.service"
+	install -Dm644 fastbangs-rs.yaml "$pkgdir/etc/fastbangs-rs.yaml"
+	install -Dm644 tmpfiles.conf "$pkgdir/usr/lib/tmpfiles.d/qbot-runtime.conf"
+}

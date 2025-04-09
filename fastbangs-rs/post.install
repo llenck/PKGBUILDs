@@ -1,0 +1,6 @@
+post_install() {
+	id -u fastbangs &>/dev/null || {
+		echo Creating fastbangs user...
+		useradd -U fastbangs
+	}
+}
